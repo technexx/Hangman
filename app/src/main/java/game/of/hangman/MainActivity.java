@@ -1,10 +1,13 @@
 package game.of.hangman;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AlphabetKeyAdapter alphabetKeyAdapter = new AlphabetKeyAdapter(this);
+        GridLayoutManager gm = new GridLayoutManager(getApplicationContext(), 9);
+
+        GridView alphabetGridView = findViewById(R.id.alphabet_listView);
+        alphabetGridView.setNumColumns(9);
+        alphabetGridView.setAdapter(alphabetKeyAdapter);
+
+
         String easyWordsString = getString(R.string.easy_words_string);
         String mediumWordsString = getString(R.string.medium_words_string);
         String hardWordsString = getString(R.string.hard_words_string);
@@ -36,12 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button randomWord = findViewById(R.id.random_word);
         randomWord.setOnClickListener(v-> {
-            String easy = selectWord(1);
-            String medium = selectWord(2);
-            String hard = selectWord(3);
-            Log.i("testWord", "easy is " + easy);
-            Log.i("testWord", "medium is " + medium);
-            Log.i("testWord", "hard is " + hard);
 
         });
 
@@ -74,9 +79,16 @@ public class MainActivity extends AppCompatActivity {
         return wordChosen;
     }
 
-    public void logArrays() {
+    public void logs() {
         Log.i("testArray", getString(R.string.hard_words_string));
         Log.i("testArray", getString(R.string.medium_words_string));
         Log.i("testArray", getString(R.string.easy_words_string));
+
+        String easy = selectWord(1);
+        String medium = selectWord(2);
+        String hard = selectWord(3);
+        Log.i("testWord", "easy is " + easy);
+        Log.i("testWord", "medium is " + medium);
+        Log.i("testWord", "hard is " + hard);
     }
 }
