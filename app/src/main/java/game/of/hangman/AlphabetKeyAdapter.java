@@ -14,7 +14,15 @@ import java.util.ArrayList;
 
 public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
     Context mContext;
-    String[] mAlphabetArray;
+    LetterSelected mLetterSelected;
+
+    public interface LetterSelected {
+        void onLetterSelected(int letterChosen);
+    }
+
+    public void selectLetter(LetterSelected xLetterSelected) {
+        mLetterSelected = xLetterSelected;
+    }
 
     public AlphabetKeyAdapter(Context context) {
         super(context, 0);
@@ -26,6 +34,10 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.alphabet_layout, parent, false);
         }
+
+        convertView.setOnClickListener(v-> {
+            mLetterSelected.onLetterSelected(position);
+        });
 
         TextView letter = convertView.findViewById(R.id.letter_in_adapter);
         letter.setText(alphabetStringArray()[position]);

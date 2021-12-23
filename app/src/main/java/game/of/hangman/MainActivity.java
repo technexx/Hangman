@@ -9,11 +9,13 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapter.LetterSelected {
 
     Random random;
     String[] easyWordsArray;
@@ -25,17 +27,23 @@ public class MainActivity extends AppCompatActivity {
     int HARD_WORD = 3;
 
     @Override
+    public void onLetterSelected(int letterChosen) {
+        Log.i("testpos", "selected is " + letterChosen);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         AlphabetKeyAdapter alphabetKeyAdapter = new AlphabetKeyAdapter(this);
-        GridLayoutManager gm = new GridLayoutManager(getApplicationContext(), 9);
+        alphabetKeyAdapter.selectLetter(MainActivity.this);
 
+        GridLayoutManager gm = new GridLayoutManager(getApplicationContext(), 9);
         GridView alphabetGridView = findViewById(R.id.alphabet_listView);
+
         alphabetGridView.setNumColumns(9);
         alphabetGridView.setAdapter(alphabetKeyAdapter);
-
 
         String easyWordsString = getString(R.string.easy_words_string);
         String mediumWordsString = getString(R.string.medium_words_string);
