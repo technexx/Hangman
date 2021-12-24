@@ -39,12 +39,23 @@ public class BoardCanvas extends View {
     }
 
     public void drawPuzzleLetterBoard() {
-        int xPos = dpConv(1);
+        int xPos = (setSpacingOfPuzzleLetterBoard(numberOfSpaces));
 
         for (int i=0; i<numberOfSpaces; i++) {
-            mCanvas.drawLine(dpConv(xPos), 0, dpConv(xPos+25), 0, mPaint);
-            dpConv(xPos+=30);
+            mCanvas.drawLine(xPos, 0, xPos+dpConv(20), 0, mPaint);
+            xPos += dpConv(30);
         }
+    }
+
+    public int setSpacingOfPuzzleLetterBoard(int numberOfLetters) {
+        int spacing = dpConv(192);
+        for (int i=0; i<numberOfLetters; i++) {
+            spacing -= dpConv(16);
+        }
+        if (numberOfLetters==12) {
+            spacing = dpConv(4);
+        }
+        return spacing;
     }
 
     public void testProgress(int progress) {
