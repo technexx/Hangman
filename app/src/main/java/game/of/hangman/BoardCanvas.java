@@ -26,7 +26,7 @@ public class BoardCanvas extends View {
     private void setUpPaint() {
         mPaint = new Paint();
         mPaint.setColor(Color.BLACK);
-//        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(6);
     }
 
@@ -44,6 +44,7 @@ public class BoardCanvas extends View {
 
         drawLetterBoard();
         drawGallows();
+        drawHangMan(1);
     }
 
     public void drawLetterBoard() {
@@ -62,18 +63,44 @@ public class BoardCanvas extends View {
         int bottomY = 240;
 
         mCanvas.drawLine(dpConv(xPosStart), dpConv(topY), dpConv(xPosEnd), dpConv(topY), mPaint);
-
         mCanvas.drawLine(dpConv(xPosStart), dpConv(topY), dpConv(xPosStart), dpConv(topY+30), mPaint);
-
         mCanvas.drawLine(dpConv(xPosEnd-30), dpConv(topY), dpConv(xPosEnd), dpConv(topY + 30), mPaint);
-
         mCanvas.drawLine(dpConv(xPosEnd), dpConv(topY), dpConv(xPosEnd), dpConv(bottomY), mPaint);
-
         mCanvas.drawLine(dpConv(xPosEnd-50), dpConv(bottomY), dpConv(xPosEnd+50), dpConv(bottomY), mPaint);
-
         mCanvas.drawLine(dpConv(xPosEnd), dpConv(bottomY-30), dpConv(xPosEnd-30), dpConv(bottomY), mPaint);
-
         mCanvas.drawLine(dpConv(xPosEnd), dpConv(bottomY-30), dpConv(xPosEnd+30), dpConv(bottomY), mPaint);
+    }
 
+    public void drawHangMan(int progress) {
+        int xPosStart = 125;
+        int topY = 115;
+        int bottomY = 215;
+
+        switch (progress) {
+            case 1:
+                mCanvas.drawCircle(dpConv(xPosStart), dpConv(topY), dpConv(25), mPaint);
+                mCanvas.drawCircle(dpConv(xPosStart-10), dpConv(topY-10), dpConv(3), mPaint);
+                mCanvas.drawCircle(dpConv(xPosStart+10), dpConv(topY-10), dpConv(3), mPaint);
+                mPaint.setStyle(Paint.Style.FILL);
+                mCanvas.drawCircle(dpConv(xPosStart), dpConv(topY), dpConv(3), mPaint);
+                mPaint.setStyle(Paint.Style.STROKE);
+
+//                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY-3), dpConv(xPosStart+5), dpConv(topY+5), mPaint);
+//                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY-3), dpConv(xPosStart-5), dpConv(topY+5), mPaint);
+//                mCanvas.drawLine(dpConv(xPosStart-5), dpConv(topY+5), dpConv(xPosStart+5), dpConv(topY+5), mPaint);
+
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY+9), dpConv(xPosStart+5), dpConv(topY+18), mPaint);
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY+9), dpConv(xPosStart-5), dpConv(topY+18), mPaint);
+            case 2:
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY+25), dpConv(xPosStart), dpConv(bottomY), mPaint);
+            case 3:
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY+60), dpConv(xPosStart-30), dpConv(topY+30), mPaint);
+            case 4:
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY+60), dpConv(xPosStart+30), dpConv(topY+30), mPaint);
+            case 5:
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(bottomY), dpConv(xPosStart-30), dpConv(bottomY+30), mPaint);
+            case 6:
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(bottomY), dpConv(xPosStart+30), dpConv(bottomY+30), mPaint);
+        }
     }
 }

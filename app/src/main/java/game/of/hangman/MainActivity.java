@@ -77,10 +77,6 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             positionSelected = random.nextInt(hardSize);
             wordChosen = hardWordsArray[positionSelected];
         }
-
-//        if (wordChosen.contains("-")) {
-//            wordChosen = wordChosen.replace("-", " ");
-//        }
         return wordChosen;
     }
 
