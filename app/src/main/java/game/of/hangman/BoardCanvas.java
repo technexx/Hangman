@@ -43,7 +43,7 @@ public class BoardCanvas extends View {
         mCanvas = canvas;
 
         drawLetterBoard();
-        drawHangMan();
+        drawGallows();
     }
 
     public void drawLetterBoard() {
@@ -55,24 +55,25 @@ public class BoardCanvas extends View {
         }
     }
 
-    public void drawHangMan() {
-        int topXStart = 125;
-        int topXEnd = 230;
+    public void drawGallows() {
+        int xPosStart = 125;
+        int xPosEnd = 230;
         int topY = 60;
+        int bottomY = 240;
 
-        mCanvas.drawLine(dpConv(topXStart), dpConv(topY), dpConv(topXEnd), dpConv(topY), mPaint);
+        mCanvas.drawLine(dpConv(xPosStart), dpConv(topY), dpConv(xPosEnd), dpConv(topY), mPaint);
 
-        mCanvas.drawLine(dpConv(topXStart), dpConv(topY), dpConv(topXStart), dpConv(topY+30), mPaint);
+        mCanvas.drawLine(dpConv(xPosStart), dpConv(topY), dpConv(xPosStart), dpConv(topY+30), mPaint);
 
-        mCanvas.drawLine(dpConv(topXEnd-30), dpConv(topY), dpConv(topXEnd), dpConv(topY + 30), mPaint);
+        mCanvas.drawLine(dpConv(xPosEnd-30), dpConv(topY), dpConv(xPosEnd), dpConv(topY + 30), mPaint);
 
-        mCanvas.drawLine(dpConv(topXEnd), dpConv(topY), dpConv(topXEnd), dpConv(topY + 150), mPaint);
+        mCanvas.drawLine(dpConv(xPosEnd), dpConv(topY), dpConv(xPosEnd), dpConv(bottomY), mPaint);
 
-        mCanvas.drawLine(dpConv(topXEnd-50), dpConv(topY+150), dpConv(topXEnd+50), dpConv(topY + 150), mPaint);
+        mCanvas.drawLine(dpConv(xPosEnd-50), dpConv(bottomY), dpConv(xPosEnd+50), dpConv(bottomY), mPaint);
 
-        mCanvas.drawLine(dpConv(topXEnd), dpConv(topY+120), dpConv(topXEnd-30), dpConv(topY + 150), mPaint);
+        mCanvas.drawLine(dpConv(xPosEnd), dpConv(bottomY-30), dpConv(xPosEnd-30), dpConv(bottomY), mPaint);
 
-        mCanvas.drawLine(dpConv(topXEnd), dpConv(topY+120), dpConv(topXEnd+30), dpConv(topY + 150), mPaint);
+        mCanvas.drawLine(dpConv(xPosEnd), dpConv(bottomY-30), dpConv(xPosEnd+30), dpConv(bottomY), mPaint);
 
     }
 }
