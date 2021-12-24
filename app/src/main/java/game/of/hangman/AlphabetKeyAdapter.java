@@ -2,6 +2,7 @@ package game.of.hangman;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,7 +39,7 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
         convertView.setOnClickListener(v-> {
             mLetterSelected.onLetterSelected(position);
         });
-
+        
         TextView letter = convertView.findViewById(R.id.letter_in_adapter);
         letter.setText(alphabetStringArray()[position]);
         return convertView;
