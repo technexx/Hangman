@@ -34,8 +34,6 @@ public class BoardCanvas extends View {
 
     public void numberOfLetters(String puzzle) {
         numberOfSpaces = puzzle.length();
-        numberOfSpaces = 12;
-        Log.i("testNumber", "length is " + numberOfSpaces);
     }
 
     public void drawPuzzleLetterBoard() {
