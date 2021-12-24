@@ -18,6 +18,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapter.LetterSelected {
 
     Random random;
+    BoardCanvas boardCanvas;
     String[] easyWordsArray;
     String[] mediumWordsArray;
     String[] hardWordsArray;
@@ -26,8 +27,12 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     int MEDIUM_WORD = 2;
     int HARD_WORD = 3;
 
+    int testNumber;
+
     @Override
     public void onLetterSelected(int letterChosen) {
+        testNumber++;
+        boardCanvas.testProgress(testNumber);
         Log.i("testpos", "selected is " + letterChosen);
     }
 
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         alphabetGridView.setNumColumns(9);
         alphabetGridView.setAdapter(alphabetKeyAdapter);
 
-        BoardCanvas boardCanvas = findViewById(R.id.board_canvas);
+        boardCanvas = findViewById(R.id.board_canvas);
         boardCanvas.numberOfLetters("Blah");
         boardCanvas.invalidate();
 
