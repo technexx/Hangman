@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -19,6 +20,11 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
 
     Random random;
     BoardCanvas boardCanvas;
+
+    Button easyGame;
+    Button mediumGame;
+    Button hardGame;
+
     String[] easyWordsArray;
     String[] mediumWordsArray;
     String[] hardWordsArray;
@@ -27,13 +33,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     int MEDIUM_WORD = 2;
     int HARD_WORD = 3;
 
-    int testNumber;
-
     @Override
     public void onLetterSelected(int letterChosen) {
-        testNumber++;
-        boardCanvas.testProgress(testNumber);
-        Log.i("testpos", "selected is " + letterChosen);
     }
 
     @Override
@@ -41,16 +42,17 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        easyGame = findViewById(R.id.easy_game);
+        mediumGame = findViewById(R.id.medium_game);
+        hardGame = findViewById(R.id.hard_game);
+        boardCanvas = findViewById(R.id.board_canvas);
+
         AlphabetKeyAdapter alphabetKeyAdapter = new AlphabetKeyAdapter(this);
         alphabetKeyAdapter.selectLetter(MainActivity.this);
 
         GridView alphabetGridView = findViewById(R.id.alphabet_listView);
         alphabetGridView.setNumColumns(9);
         alphabetGridView.setAdapter(alphabetKeyAdapter);
-
-        boardCanvas = findViewById(R.id.board_canvas);
-        boardCanvas.numberOfLetters("Blah");
-        boardCanvas.invalidate();
 
         String easyWordsString = getString(R.string.easy_words_string);
         String mediumWordsString = getString(R.string.medium_words_string);
@@ -60,6 +62,24 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         mediumWordsArray = mediumWordsString.split(" ");
         hardWordsArray = hardWordsString.split(" ");
 
+        easyGame.setOnClickListener(v-> {
+            boardCanvas.numberOfLetters(selectWord(EASY_WORD));
+            boardCanvas.invalidate();
+//            switchViewsForActiveOrInactivePuzzle(true);
+        });
+
+        mediumGame.setOnClickListener(v-> {
+            boardCanvas.numberOfLetters(selectWord(MEDIUM_WORD));
+            boardCanvas.invalidate();
+//            switchViewsForActiveOrInactivePuzzle(true);
+        });
+
+        hardGame.setOnClickListener(v-> {
+            boardCanvas.numberOfLetters(selectWord(HARD_WORD));
+            boardCanvas.invalidate();
+//            switchViewsForActiveOrInactivePuzzle(true);
+        });
+
     }
 
     public String selectWord(int difficulty) {
@@ -67,22 +87,38 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         int positionSelected;
         String wordChosen = "";
 
-        if (difficulty==1) {
+        if (difficulty==EASY_WORD) {
             int easySize = easyWordsArray.length;
             positionSelected = random.nextInt((easySize));
             wordChosen = easyWordsArray[positionSelected];
         }
-        if (difficulty==2) {
+        if (difficulty==MEDIUM_WORD) {
             int mediumSize = mediumWordsArray.length;
             positionSelected = random.nextInt(mediumSize);
             wordChosen = mediumWordsArray[positionSelected];
         }
-        if (difficulty==3) {
+        if (difficulty==HARD_WORD) {
             int hardSize = hardWordsArray.length;
             positionSelected = random.nextInt(hardSize);
             wordChosen = hardWordsArray[positionSelected];
         }
         return wordChosen;
+    }
+
+    public void switchViewsForActiveOrInactivePuzzle(boolean activeGame) {
+        if (activeGame) {
+            easyGame.setVisibility(View.GONE);
+            mediumGame.setVisibility(View.GONE);
+            hardGame.setVisibility(View.GONE);
+        } else {
+            easyGame.setVisibility(View.VISIBLE);
+            mediumGame.setVisibility(View.VISIBLE);
+            hardGame.setVisibility(View.VISIBLE);
+
+            boardCanvas.numberOfLetters("");
+            boardCanvas.drawPuzzleLetterBoard();
+            boardCanvas.invalidate();
+        }
     }
 
     public void logs() {

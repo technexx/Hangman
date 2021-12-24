@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -33,6 +34,17 @@ public class BoardCanvas extends View {
 
     public void numberOfLetters(String puzzle) {
         numberOfSpaces = puzzle.length();
+        numberOfSpaces = 12;
+        Log.i("testNumber", "length is " + numberOfSpaces);
+    }
+
+    public void drawPuzzleLetterBoard() {
+        int xPos = dpConv(1);
+
+        for (int i=0; i<numberOfSpaces; i++) {
+            mCanvas.drawLine(dpConv(xPos), 0, dpConv(xPos+25), 0, mPaint);
+            dpConv(xPos+=30);
+        }
     }
 
     public void testProgress(int progress) {
@@ -40,26 +52,13 @@ public class BoardCanvas extends View {
         invalidate();
     }
 
-    public int dpConv(float pixels) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, pixels, getResources().getDisplayMetrics());
-    }
-
     @Override
     public void onDraw(Canvas canvas) {
         mCanvas = canvas;
 
-        drawLetterBoard();
+        drawPuzzleLetterBoard();
         drawGallows();
         drawHangMan(mProgress);
-    }
-
-    public void drawLetterBoard() {
-        int xPos = dpConv(33);
-
-        for (int i=0; i<numberOfSpaces; i++) {
-            mCanvas.drawLine(dpConv(xPos), 0, dpConv(xPos+30), 0, mPaint);
-            dpConv(xPos+=42);
-        }
     }
 
     public void drawGallows() {
@@ -108,5 +107,9 @@ public class BoardCanvas extends View {
             mCanvas.drawLine(dpConv(xPosStart), dpConv(bottomY), dpConv(xPosStart+30), dpConv(bottomY+30), mPaint);
 
         }
+    }
+
+    public int dpConv(float pixels) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, pixels, getResources().getDisplayMetrics());
     }
 }
