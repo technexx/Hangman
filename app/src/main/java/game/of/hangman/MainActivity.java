@@ -39,11 +39,13 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         AlphabetKeyAdapter alphabetKeyAdapter = new AlphabetKeyAdapter(this);
         alphabetKeyAdapter.selectLetter(MainActivity.this);
 
-        GridLayoutManager gm = new GridLayoutManager(getApplicationContext(), 9);
         GridView alphabetGridView = findViewById(R.id.alphabet_listView);
-
         alphabetGridView.setNumColumns(9);
         alphabetGridView.setAdapter(alphabetKeyAdapter);
+
+        BoardCanvas boardCanvas = findViewById(R.id.board_canvas);
+        boardCanvas.numberOfLetters("Blah");
+        boardCanvas.invalidate();
 
         String easyWordsString = getString(R.string.easy_words_string);
         String mediumWordsString = getString(R.string.medium_words_string);
@@ -52,11 +54,6 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         easyWordsArray = easyWordsString.split(" ");
         mediumWordsArray = mediumWordsString.split(" ");
         hardWordsArray = hardWordsString.split(" ");
-
-        Button randomWord = findViewById(R.id.random_word);
-        randomWord.setOnClickListener(v-> {
-
-        });
 
     }
 
@@ -81,9 +78,9 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             wordChosen = hardWordsArray[positionSelected];
         }
 
-        if (wordChosen.contains("-")) {
-            wordChosen = wordChosen.replace("-", " ");
-        }
+//        if (wordChosen.contains("-")) {
+//            wordChosen = wordChosen.replace("-", " ");
+//        }
         return wordChosen;
     }
 
