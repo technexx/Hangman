@@ -15,7 +15,9 @@ import java.util.ArrayList;
 
 public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
     Context mContext;
+    String[] mAlphabetList;
     LetterSelected mLetterSelected;
+    int positionToGreyOut = -1;
 
     public interface LetterSelected {
         void onLetterSelected(int letterChosen);
@@ -25,9 +27,14 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
         mLetterSelected = xLetterSelected;
     }
 
-    public AlphabetKeyAdapter(Context context) {
+    public AlphabetKeyAdapter(Context context, String[] alphabetList) {
         super(context, 0);
-        mContext = context;
+        this.mContext = context;
+        this.mAlphabetList = alphabetList;
+    }
+
+    public void greyOutSelectedLetter(int position) {
+        positionToGreyOut = position;
     }
 
     @Override
@@ -39,19 +46,20 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
         convertView.setOnClickListener(v-> {
             mLetterSelected.onLetterSelected(position);
         });
-        
+
         TextView letter = convertView.findViewById(R.id.letter_in_adapter);
-        letter.setText(alphabetStringArray()[position]);
+        letter.setText(mAlphabetList[position]);
+
+        if (positionToGreyOut == position) {
+            letter.setAlpha(0.3f);
+            positionToGreyOut = -1;
+        }
+
         return convertView;
     }
 
     @Override
     public int getCount() {
-        return alphabetStringArray().length;
-    }
-
-    public String[] alphabetStringArray() {
-        String alphabet = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z";
-        return alphabet.split(", ");
+        return mAlphabetList.length;
     }
 }

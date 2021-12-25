@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapter.LetterSelected {
 
+    AlphabetKeyAdapter alphabetKeyAdapter;
     Random random;
     BoardCanvas boardCanvas;
 
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
 
     @Override
     public void onLetterSelected(int letterChosen) {
+        alphabetKeyAdapter.greyOutSelectedLetter(letterChosen);
+        alphabetKeyAdapter.notifyDataSetChanged();
     }
 
     public void fillInLetterOrGallows(boolean correctLetter) {
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         }
     }
 
-    public int heckAndReturnLettersInPuzzle(int keyboardLetterPosition) {
+    public int checkAndReturnLettersInPuzzle(int keyboardLetterPosition) {
         String letterSelected = convertPositionToLetter(keyboardLetterPosition);
         ArrayList<String> chosenWordArray = splitPuzzleWord(wordChosen);
         int positionOfChosenLetterInPuzzle = -1;
@@ -70,13 +73,13 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        alphabetKeyAdapter = new AlphabetKeyAdapter(getApplicationContext(), alphabetStringArray());
+        alphabetKeyAdapter.selectLetter(MainActivity.this);
+
         easyGame = findViewById(R.id.easy_game);
         mediumGame = findViewById(R.id.medium_game);
         hardGame = findViewById(R.id.hard_game);
         boardCanvas = findViewById(R.id.board_canvas);
-
-        AlphabetKeyAdapter alphabetKeyAdapter = new AlphabetKeyAdapter(this);
-        alphabetKeyAdapter.selectLetter(MainActivity.this);
 
         GridView alphabetGridView = findViewById(R.id.alphabet_listView);
         alphabetGridView.setNumColumns(9);
@@ -91,20 +94,20 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         hardWordsArray = hardWordsString.split(" ");
 
         easyGame.setOnClickListener(v-> {
-            boardCanvas.numberOfLetters(selectWord(EASY_WORD));
+            boardCanvas.numberOfLettersInPuzzle(selectWord(EASY_WORD));
             boardCanvas.invalidate();
 
             Log.i("testWord", "array is " + splitPuzzleWord(wordChosen));
         });
 
         mediumGame.setOnClickListener(v-> {
-            boardCanvas.numberOfLetters(selectWord(MEDIUM_WORD));
+            boardCanvas.numberOfLettersInPuzzle(selectWord(MEDIUM_WORD));
             boardCanvas.invalidate();
 //            switchViewsForActiveOrInactivePuzzle(true);
         });
 
         hardGame.setOnClickListener(v-> {
-            boardCanvas.numberOfLetters(selectWord(HARD_WORD));
+            boardCanvas.numberOfLettersInPuzzle(selectWord(HARD_WORD));
             boardCanvas.invalidate();
 //            switchViewsForActiveOrInactivePuzzle(true);
         });
@@ -144,10 +147,15 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             mediumGame.setVisibility(View.VISIBLE);
             hardGame.setVisibility(View.VISIBLE);
 
-            boardCanvas.numberOfLetters("");
+            boardCanvas.numberOfLettersInPuzzle("");
             boardCanvas.drawPuzzleLetterBoard();
             boardCanvas.invalidate();
         }
+    }
+
+    public String[] alphabetStringArray() {
+        String alphabet = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z";
+        return alphabet.split(", ");
     }
 
     public String convertPositionToLetter(int position) {

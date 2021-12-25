@@ -32,10 +32,6 @@ public class BoardCanvas extends View {
         mPaint.setStrokeWidth(6);
     }
 
-    public void numberOfLetters(String puzzle) {
-        numberOfSpaces = puzzle.length();
-    }
-
     public void drawPuzzleLetterBoard() {
         int xPos = (setSpacingOfPuzzleLetterBoard(numberOfSpaces));
 
@@ -54,6 +50,12 @@ public class BoardCanvas extends View {
             spacing = dpConv(4);
         }
         return spacing;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void numberOfLettersInPuzzle(String puzzle) {
+        numberOfSpaces = puzzle.length();
     }
 
     public void addToGallows() {
