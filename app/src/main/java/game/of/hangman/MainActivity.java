@@ -1,16 +1,12 @@
 package game.of.hangman;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ListView;
-
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,43 +33,36 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
 
     @Override
     public void onLetterSelected(int letterChosen) {
-
     }
 
-    public boolean checkIfLetterExistsInPuzzle(int position) {
-        String letterSelected = convertPositionToLetter(position);
-        return wordChosen.contains(letterSelected);
+    public void fillInLetterOrGallows(boolean correctLetter) {
+        if (correctLetter) {
+
+        } else {
+            boardCanvas.addToGallows();
+        }
     }
 
-    public String convertPositionToLetter(int position) {
-        String letter = "";
-        if (position==0) letter = "A";
-        if (position==1) letter = "B";
-        if (position==2) letter = "C";
-        if (position==3) letter = "D";
-        if (position==4) letter = "E";
-        if (position==5) letter = "F";
-        if (position==6) letter = "G";
-        if (position==7) letter = "H";
-        if (position==8) letter = "I";
-        if (position==9) letter = "J";
-        if (position==10) letter = "K";
-        if (position==11) letter = "L";
-        if (position==12) letter = "M";
-        if (position==13) letter = "N";
-        if (position==14) letter = "O";
-        if (position==15) letter = "P";
-        if (position==16) letter = "Q";
-        if (position==17) letter = "R";
-        if (position==18) letter = "S";
-        if (position==19) letter = "T";
-        if (position==20) letter = "U";
-        if (position==21) letter = "V";
-        if (position==22) letter = "W";
-        if (position==23) letter = "X";
-        if (position==24) letter = "Y";
-        if (position==25) letter = "Z";
-        return letter;
+    public int heckAndReturnLettersInPuzzle(int keyboardLetterPosition) {
+        String letterSelected = convertPositionToLetter(keyboardLetterPosition);
+        ArrayList<String> chosenWordArray = splitPuzzleWord(wordChosen);
+        int positionOfChosenLetterInPuzzle = -1;
+
+        for (int i=0; i<chosenWordArray.size(); i++) {
+            if (chosenWordArray.get(i).contains(letterSelected)) {
+                positionOfChosenLetterInPuzzle = i;
+            }
+        }
+
+        return positionOfChosenLetterInPuzzle;
+    }
+
+    public ArrayList<String> splitPuzzleWord(String word) {
+        ArrayList<String> wordArray = new ArrayList<>();
+        for (int i=0; i<word.length(); i++) {
+            wordArray.add(word.substring(i, i+1));
+        }
+        return wordArray;
     }
 
     @Override
@@ -104,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         easyGame.setOnClickListener(v-> {
             boardCanvas.numberOfLetters(selectWord(EASY_WORD));
             boardCanvas.invalidate();
-//            switchViewsForActiveOrInactivePuzzle(true);
+
+            Log.i("testWord", "array is " + splitPuzzleWord(wordChosen));
         });
 
         mediumGame.setOnClickListener(v-> {
@@ -159,6 +149,38 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             boardCanvas.invalidate();
         }
     }
+
+    public String convertPositionToLetter(int position) {
+        String letter = "";
+        if (position==0) letter = "A";
+        if (position==1) letter = "B";
+        if (position==2) letter = "C";
+        if (position==3) letter = "D";
+        if (position==4) letter = "E";
+        if (position==5) letter = "F";
+        if (position==6) letter = "G";
+        if (position==7) letter = "H";
+        if (position==8) letter = "I";
+        if (position==9) letter = "J";
+        if (position==10) letter = "K";
+        if (position==11) letter = "L";
+        if (position==12) letter = "M";
+        if (position==13) letter = "N";
+        if (position==14) letter = "O";
+        if (position==15) letter = "P";
+        if (position==16) letter = "Q";
+        if (position==17) letter = "R";
+        if (position==18) letter = "S";
+        if (position==19) letter = "T";
+        if (position==20) letter = "U";
+        if (position==21) letter = "V";
+        if (position==22) letter = "W";
+        if (position==23) letter = "X";
+        if (position==24) letter = "Y";
+        if (position==25) letter = "Z";
+        return letter;
+    }
+
 
     public void logs() {
         Log.i("testArray", getString(R.string.hard_words_string));

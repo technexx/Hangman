@@ -18,7 +18,7 @@ public class BoardCanvas extends View {
     Paint mPaint;
 
     int numberOfSpaces;
-    int mProgress;
+    int mGallowsProgress;
 
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -56,8 +56,8 @@ public class BoardCanvas extends View {
         return spacing;
     }
 
-    public void testProgress(int progress) {
-        mProgress = progress;
+    public void addToGallows() {
+        mGallowsProgress++;
         invalidate();
     }
 
@@ -67,7 +67,7 @@ public class BoardCanvas extends View {
 
         drawPuzzleLetterBoard();
         drawGallows();
-        drawHangMan(mProgress);
+        drawHangMan(mGallowsProgress);
     }
 
     public void drawGallows() {
