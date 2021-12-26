@@ -16,6 +16,7 @@ public class BoardCanvas extends View {
     AlphabetConversions alphabetConversions = new AlphabetConversions();
     Canvas mCanvas;
     Paint mPaint;
+    Paint mPaintText;
 
     int numberOfSpaces;
     int mGallowsProgress;
@@ -27,6 +28,7 @@ public class BoardCanvas extends View {
     public void replaceBlankSpaceWithLetter(int spaceInPuzzleToFill) {
         this.mSpaceInPuzzleToFill = spaceInPuzzleToFill;
         mLetterExistsInPuzzle = true;
+        invalidate();
     }
 
     public void letterSelectedFromKeyboard(int letter) {
@@ -43,20 +45,25 @@ public class BoardCanvas extends View {
         mPaint.setColor(Color.BLACK);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(6);
+
+        mPaintText = new Paint();
+        mPaintText.setTextSize(70f);
+        mPaintText.setColor(Color.BLACK);
     }
 
     public void drawPuzzleLetterBoard() {
         int xPos = (setSpacingOfPuzzleLetterBoard(numberOfSpaces));
+        int yPos = dpConv(60);
 
         for (int i=0; i<numberOfSpaces; i++) {
-            mCanvas.drawLine(xPos, 0, xPos+dpConv(20), 0, mPaint);
+            mCanvas.drawLine(xPos, yPos, xPos+dpConv(20), yPos, mPaint);
             xPos += dpConv(30);
+            //Todo: (i) will iterate over every space here, when we just want it for the letter position.
             if (mLetterExistsInPuzzle) {
-                int letterStart = setSpacingOfLetterPopulatingBoard(i);
-                int letterEnd = letterStart + dpConv(20);
-                mCanvas.drawText(mLetterSelectedToUseInPuzzle, letterStart, letterEnd, mPaint);
-
-                mLetterExistsInPuzzle = false;
+                if (mSpaceInPuzzleToFill==i) {
+                    int letterStart = setSpacingOfLetterPopulatingBoard(i);
+                    mCanvas.drawText(mLetterSelectedToUseInPuzzle, letterStart, dpConv(25) , mPaintText);
+                }
             }
         }
     }
@@ -103,8 +110,8 @@ public class BoardCanvas extends View {
     public void drawGallows() {
         int xPosStart = 125;
         int xPosEnd = 230;
-        int topY = 60;
-        int bottomY = 240;
+        int topY = 110;
+        int bottomY = 290;
 
         mCanvas.drawLine(dpConv(xPosStart), dpConv(topY), dpConv(xPosEnd), dpConv(topY), mPaint);
         mCanvas.drawLine(dpConv(xPosStart), dpConv(topY), dpConv(xPosStart), dpConv(topY+30), mPaint);
@@ -117,8 +124,8 @@ public class BoardCanvas extends View {
 
     public void drawHangMan(int progress) {
         int xPosStart = 125;
-        int topY = 115;
-        int bottomY = 215;
+        int topY = 165;
+        int bottomY = 265;
 
         if (progress>0) {
             mCanvas.drawCircle(dpConv(xPosStart), dpConv(topY), dpConv(25), mPaint);
