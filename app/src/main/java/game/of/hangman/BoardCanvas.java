@@ -45,7 +45,7 @@ public class BoardCanvas extends View {
         if (!lettersInPuzzleArrayList.contains(letterReceived)) {
             lettersInPuzzleArrayList.set(letterPositionInPuzzle, letterReceived);
         }
-        Log.i("testWord", "selected list is " + lettersInPuzzleArrayList);
+        invalidate();
     }
 
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
@@ -71,19 +71,25 @@ public class BoardCanvas extends View {
         for (int i=0; i<numberOfSpaces; i++) {
             mCanvas.drawLine(xPos, yPos, xPos+dpConv(20), yPos, mPaint);
             xPos += dpConv(30);
-            //Todo: (i) will iterate over every space here, when we just want it for the letter position.
-//            if (mLetterExistsInPuzzle) {
-//                if (mSpaceInPuzzleToFill==i) {
-//                    int letterStart = setSpacingOfLetterPopulatingBoard(i);
-//                    mCanvas.drawText(mLetterSelectedToUseInPuzzle, letterStart, dpConv(25) , mPaintText);
-//                }
-//            }
+        }
+
+        //Todo: Need to adjust for multiple letters in word.
+        Log.i("testWord", "selected list is " + lettersInPuzzleArrayList);
+        for (int k=0; k<lettersInPuzzleArrayList.size(); k++) {
+            String puzzleLetter = lettersInPuzzleArrayList.get(k);
+            int indexPlaces = lettersInPuzzleArrayList.size() - 1;
+            if (!puzzleLetter.equals(" ")) {
+                int letterPosition = setSpacingOfLetterPopulatingBoard(indexPlaces - k);
+
+//                int letterPosition = setSpacingOfLetterPopulatingBoard(indexPlaces - k);
+                mCanvas.drawText(puzzleLetter, letterPosition, dpConv(25) , mPaintText);
+            }
         }
     }
 
     public int setSpacingOfLetterPopulatingBoard(int positionInPuzzle) {
-        if (positionInPuzzle!=12) {
-            return dpConv( (192) - (16*positionInPuzzle));
+        if (positionInPuzzle!=11) {
+            return dpConv( (220) - (30*positionInPuzzle));
         } else {
             return dpConv(4);
         }

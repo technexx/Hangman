@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             if (positionOfLetter != LETTER_DOES_NOT_EXIST) {
                 boardCanvas.addLetterSelectedToPuzzleArrayList(positionOfLetter);
             } else {
-                boardCanvas.addToGallows();
+//                boardCanvas.addToGallows();
             }
         }
     }
@@ -129,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             int easySize = easyWordsArray.length;
             positionSelected = random.nextInt((easySize));
             wordChosen = easyWordsArray[positionSelected];
+
+            //Todo: Testing.
+            wordChosen = "duck";
         }
         if (difficulty==MEDIUM_WORD) {
             int mediumSize = mediumWordsArray.length;
