@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapter.LetterSelected {
 
+    //Fira code retina
     AlphabetConversions alphabetConversions;
     AlphabetKeyAdapter alphabetKeyAdapter;
     Random random;
@@ -33,32 +34,26 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     int HARD_WORD = 3;
 
     String wordChosen;
-    String currentLetterSelected;
     int LETTER_DOES_NOT_EXIST = -1;
 
     @Override
-    public void onLetterSelected(int letterClickedInAdapter) {
+    public void onLetterSelected(int alphabetLetter) {
         if (hasGameStarted) {
             Log.i("testWord", "word is " + wordChosen);
-            alphabetKeyAdapter.greyOutSelectedLetter(letterClickedInAdapter);
-            //For list of letters already chosen.
-            currentLetterSelected = alphabetConversions.convertPositionToLetter(letterClickedInAdapter);
-            boardCanvas.letterSelectedFromKeyboard(letterClickedInAdapter);
+            alphabetKeyAdapter.greyOutSelectedLetter(alphabetLetter);
 
-            int positionOFLetterSelectedInPuzzle = checkAndReturnLettersInPuzzle(letterClickedInAdapter);
-            fillInLetterOrGallows(positionOFLetterSelectedInPuzzle);
+            boardCanvas.addLetterSelectedToTotalLetterArrayList(alphabetLetter);
+
+            int positionOfLetter = returnPositionOfLetterInPuzzleIfItExists(alphabetLetter);
+            if (positionOfLetter != LETTER_DOES_NOT_EXIST) {
+                boardCanvas.addLetterSelectedToPuzzleArrayList(positionOfLetter);
+            } else {
+                boardCanvas.addToGallows();
+            }
         }
     }
 
-    public void fillInLetterOrGallows(int letterPosition) {
-        if (letterPosition==LETTER_DOES_NOT_EXIST) {
-            boardCanvas.addToGallows();
-        } else {
-            boardCanvas.replaceBlankSpaceWithLetter(letterPosition);
-        }
-    }
-
-    public int checkAndReturnLettersInPuzzle(int keyboardLetterPosition) {
+    public int returnPositionOfLetterInPuzzleIfItExists(int keyboardLetterPosition) {
         String letterSelected = alphabetConversions.convertPositionToLetter(keyboardLetterPosition);
         ArrayList<String> chosenWordArray = splitPuzzleWord(wordChosen);
         int positionOfChosenLetterInPuzzle = -1;
@@ -110,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             boardCanvas.numberOfLettersInPuzzle(selectWord(EASY_WORD));
             boardCanvas.invalidate();
             switchViewsForActiveOrInactivePuzzle(true);
-            Log.i("testWord", "array is " + splitPuzzleWord(wordChosen));
         });
 
         mediumGame.setOnClickListener(v-> {
@@ -130,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     public String selectWord(int difficulty) {
         random = new Random();
         int positionSelected;
-        String word = "";
 
         if (difficulty==EASY_WORD) {
             int easySize = easyWordsArray.length;
@@ -147,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             positionSelected = random.nextInt(hardSize);
             wordChosen = hardWordsArray[positionSelected];
         }
+
+        boardCanvas.populatePuzzleArrayListWithBlanks(wordChosen.length());
         return wordChosen;
     }
 

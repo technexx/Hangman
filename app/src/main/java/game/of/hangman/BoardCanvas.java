@@ -11,6 +11,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class BoardCanvas extends View {
 
     AlphabetConversions alphabetConversions = new AlphabetConversions();
@@ -21,18 +23,29 @@ public class BoardCanvas extends View {
     int numberOfSpaces;
     int mGallowsProgress;
 
-    boolean mLetterExistsInPuzzle;
-    String mLetterSelectedToUseInPuzzle;
-    int mSpaceInPuzzleToFill;
+    String letterReceived;
+    ArrayList<String> totalLettersSelectedArrayList = new ArrayList<>();
+    ArrayList<String> lettersInPuzzleArrayList = new ArrayList<>();
 
-    public void replaceBlankSpaceWithLetter(int spaceInPuzzleToFill) {
-        this.mSpaceInPuzzleToFill = spaceInPuzzleToFill;
-        mLetterExistsInPuzzle = true;
-        invalidate();
+    public void populatePuzzleArrayListWithBlanks(int numberOfBlanks) {
+        for (int i=0; i<numberOfBlanks; i++) {
+            lettersInPuzzleArrayList.add(" ");
+        }
     }
 
-    public void letterSelectedFromKeyboard(int letter) {
-        this.mLetterSelectedToUseInPuzzle = alphabetConversions.convertPositionToLetter(letter);
+    public void addLetterSelectedToTotalLetterArrayList(int alphabetPosition) {
+        letterReceived = alphabetConversions.convertPositionToLetter(alphabetPosition);
+        if (!totalLettersSelectedArrayList.contains(letterReceived)) {
+            totalLettersSelectedArrayList.add(letterReceived);
+        }
+        Log.i("testWord", "total list is " + totalLettersSelectedArrayList);
+    }
+
+    public void addLetterSelectedToPuzzleArrayList(int letterPositionInPuzzle) {
+        if (!lettersInPuzzleArrayList.contains(letterReceived)) {
+            lettersInPuzzleArrayList.set(letterPositionInPuzzle, letterReceived);
+        }
+        Log.i("testWord", "selected list is " + lettersInPuzzleArrayList);
     }
 
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
@@ -59,12 +72,12 @@ public class BoardCanvas extends View {
             mCanvas.drawLine(xPos, yPos, xPos+dpConv(20), yPos, mPaint);
             xPos += dpConv(30);
             //Todo: (i) will iterate over every space here, when we just want it for the letter position.
-            if (mLetterExistsInPuzzle) {
-                if (mSpaceInPuzzleToFill==i) {
-                    int letterStart = setSpacingOfLetterPopulatingBoard(i);
-                    mCanvas.drawText(mLetterSelectedToUseInPuzzle, letterStart, dpConv(25) , mPaintText);
-                }
-            }
+//            if (mLetterExistsInPuzzle) {
+//                if (mSpaceInPuzzleToFill==i) {
+//                    int letterStart = setSpacingOfLetterPopulatingBoard(i);
+//                    mCanvas.drawText(mLetterSelectedToUseInPuzzle, letterStart, dpConv(25) , mPaintText);
+//                }
+//            }
         }
     }
 
