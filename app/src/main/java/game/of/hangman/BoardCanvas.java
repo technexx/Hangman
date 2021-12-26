@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -143,8 +145,16 @@ public class BoardCanvas extends View {
 
         if (progress>0) {
             mCanvas.drawCircle(dpConv(xPosStart), dpConv(topY), dpConv(25), mPaint);
-            mCanvas.drawCircle(dpConv(xPosStart-10), dpConv(topY-10), dpConv(3), mPaint);
-            mCanvas.drawCircle(dpConv(xPosStart+10), dpConv(topY-10), dpConv(3), mPaint);
+            if (progress<=5) {
+                mCanvas.drawCircle(dpConv(xPosStart-10), dpConv(topY-10), dpConv(3), mPaint);
+                mCanvas.drawCircle(dpConv(xPosStart+10), dpConv(topY-10), dpConv(3), mPaint);
+            } else {
+                mPaintText.setTextSize(40f);
+                mCanvas.drawText("x", dpConv(xPosStart-10), dpConv(topY-10), mPaintText);
+                mCanvas.drawText("x", dpConv(xPosStart+3), dpConv(topY-10), mPaintText);
+                mPaintText.setTextSize(70f);
+                mCanvas.drawLine(dpConv(xPosStart), dpConv(topY+9), dpConv(xPosStart), dpConv(topY+20), mPaint);
+            }
             mPaint.setStyle(Paint.Style.FILL);
             mCanvas.drawCircle(dpConv(xPosStart), dpConv(topY), dpConv(3), mPaint);
             mPaint.setStyle(Paint.Style.STROKE);
@@ -165,7 +175,6 @@ public class BoardCanvas extends View {
         }
         if (progress>5) {
             mCanvas.drawLine(dpConv(xPosStart), dpConv(bottomY), dpConv(xPosStart+30), dpConv(bottomY+30), mPaint);
-
         }
     }
 

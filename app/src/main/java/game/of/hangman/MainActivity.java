@@ -32,9 +32,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     int EASY_WORD = 1;
     int MEDIUM_WORD = 2;
     int HARD_WORD = 3;
-
     String wordChosen;
-    int LETTER_DOES_NOT_EXIST = -1;
 
     @Override
     public void onLetterSelected(int alphabetLetter) {
