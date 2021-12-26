@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapter.LetterSelected {
 
+    AlphabetConversions alphabetConversions;
     AlphabetKeyAdapter alphabetKeyAdapter;
     Random random;
     BoardCanvas boardCanvas;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     Button easyGame;
     Button mediumGame;
     Button hardGame;
+    boolean hasGameStarted;
 
     String[] easyWordsArray;
     String[] mediumWordsArray;
@@ -31,32 +33,41 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     int HARD_WORD = 3;
 
     String wordChosen;
+    String currentLetterSelected;
+    int LETTER_DOES_NOT_EXIST = -1;
 
     @Override
-    public void onLetterSelected(int letterChosen) {
-        alphabetKeyAdapter.greyOutSelectedLetter(letterChosen);
-        alphabetKeyAdapter.notifyDataSetChanged();
+    public void onLetterSelected(int letterClickedInAdapter) {
+        if (hasGameStarted) {
+            Log.i("testWord", "word is " + wordChosen);
+            alphabetKeyAdapter.greyOutSelectedLetter(letterClickedInAdapter);
+            //For list of letters already chosen.
+            currentLetterSelected = alphabetConversions.convertPositionToLetter(letterClickedInAdapter);
+            boardCanvas.letterSelectedFromKeyboard(letterClickedInAdapter);
+
+            int positionOFLetterSelectedInPuzzle = checkAndReturnLettersInPuzzle(letterClickedInAdapter);
+            fillInLetterOrGallows(positionOFLetterSelectedInPuzzle);
+        }
     }
 
-    public void fillInLetterOrGallows(boolean correctLetter) {
-        if (correctLetter) {
-
-        } else {
+    public void fillInLetterOrGallows(int letterPosition) {
+        if (letterPosition==LETTER_DOES_NOT_EXIST) {
             boardCanvas.addToGallows();
+        } else {
+            boardCanvas.replaceBlankSpaceWithLetter(letterPosition);
         }
     }
 
     public int checkAndReturnLettersInPuzzle(int keyboardLetterPosition) {
-        String letterSelected = convertPositionToLetter(keyboardLetterPosition);
+        String letterSelected = alphabetConversions.convertPositionToLetter(keyboardLetterPosition);
         ArrayList<String> chosenWordArray = splitPuzzleWord(wordChosen);
         int positionOfChosenLetterInPuzzle = -1;
 
         for (int i=0; i<chosenWordArray.size(); i++) {
-            if (chosenWordArray.get(i).contains(letterSelected)) {
+            if (chosenWordArray.get(i).equalsIgnoreCase(letterSelected)) {
                 positionOfChosenLetterInPuzzle = i;
             }
         }
-
         return positionOfChosenLetterInPuzzle;
     }
 
@@ -73,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        alphabetKeyAdapter = new AlphabetKeyAdapter(getApplicationContext(), alphabetStringArray());
+        alphabetConversions = new AlphabetConversions();
+
+        alphabetKeyAdapter = new AlphabetKeyAdapter(getApplicationContext(), alphabetConversions.alphabetStringArray());
         alphabetKeyAdapter.selectLetter(MainActivity.this);
 
         easyGame = findViewById(R.id.easy_game);
@@ -96,20 +109,20 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         easyGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(EASY_WORD));
             boardCanvas.invalidate();
-
+            switchViewsForActiveOrInactivePuzzle(true);
             Log.i("testWord", "array is " + splitPuzzleWord(wordChosen));
         });
 
         mediumGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(MEDIUM_WORD));
             boardCanvas.invalidate();
-//            switchViewsForActiveOrInactivePuzzle(true);
+            switchViewsForActiveOrInactivePuzzle(true);
         });
 
         hardGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(HARD_WORD));
             boardCanvas.invalidate();
-//            switchViewsForActiveOrInactivePuzzle(true);
+            switchViewsForActiveOrInactivePuzzle(true);
         });
 
     }
@@ -142,51 +155,17 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             easyGame.setVisibility(View.GONE);
             mediumGame.setVisibility(View.GONE);
             hardGame.setVisibility(View.GONE);
+            hasGameStarted = true;
         } else {
             easyGame.setVisibility(View.VISIBLE);
             mediumGame.setVisibility(View.VISIBLE);
             hardGame.setVisibility(View.VISIBLE);
+            hasGameStarted = false;
 
             boardCanvas.numberOfLettersInPuzzle("");
             boardCanvas.drawPuzzleLetterBoard();
             boardCanvas.invalidate();
         }
-    }
-
-    public String[] alphabetStringArray() {
-        String alphabet = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z";
-        return alphabet.split(", ");
-    }
-
-    public String convertPositionToLetter(int position) {
-        String letter = "";
-        if (position==0) letter = "A";
-        if (position==1) letter = "B";
-        if (position==2) letter = "C";
-        if (position==3) letter = "D";
-        if (position==4) letter = "E";
-        if (position==5) letter = "F";
-        if (position==6) letter = "G";
-        if (position==7) letter = "H";
-        if (position==8) letter = "I";
-        if (position==9) letter = "J";
-        if (position==10) letter = "K";
-        if (position==11) letter = "L";
-        if (position==12) letter = "M";
-        if (position==13) letter = "N";
-        if (position==14) letter = "O";
-        if (position==15) letter = "P";
-        if (position==16) letter = "Q";
-        if (position==17) letter = "R";
-        if (position==18) letter = "S";
-        if (position==19) letter = "T";
-        if (position==20) letter = "U";
-        if (position==21) letter = "V";
-        if (position==22) letter = "W";
-        if (position==23) letter = "X";
-        if (position==24) letter = "Y";
-        if (position==25) letter = "Z";
-        return letter;
     }
 
 

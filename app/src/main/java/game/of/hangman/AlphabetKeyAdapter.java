@@ -16,11 +16,12 @@ import java.util.ArrayList;
 public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
     Context mContext;
     String[] mAlphabetList;
+
     LetterSelected mLetterSelected;
     int positionToGreyOut = -1;
 
     public interface LetterSelected {
-        void onLetterSelected(int letterChosen);
+        void onLetterSelected(int currentLetterSelected);
     }
 
     public void selectLetter(LetterSelected xLetterSelected) {
@@ -35,6 +36,7 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
 
     public void greyOutSelectedLetter(int position) {
         positionToGreyOut = position;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -43,17 +45,15 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.alphabet_layout, parent, false);
         }
 
-        convertView.setOnClickListener(v-> {
-            mLetterSelected.onLetterSelected(position);
-        });
-
         TextView letter = convertView.findViewById(R.id.letter_in_adapter);
         letter.setText(mAlphabetList[position]);
 
-        if (positionToGreyOut == position) {
-            letter.setAlpha(0.3f);
-            positionToGreyOut = -1;
-        }
+        convertView.setOnClickListener(v-> {
+            mLetterSelected.onLetterSelected(position);
+            if (positionToGreyOut==position) {
+                letter.setAlpha(0.3f);
+            }
+        });
 
         return convertView;
     }

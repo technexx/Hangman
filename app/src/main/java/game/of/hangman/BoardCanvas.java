@@ -13,12 +13,25 @@ import androidx.annotation.Nullable;
 
 public class BoardCanvas extends View {
 
-    Context mContext;
+    AlphabetConversions alphabetConversions = new AlphabetConversions();
     Canvas mCanvas;
     Paint mPaint;
 
     int numberOfSpaces;
     int mGallowsProgress;
+
+    boolean mLetterExistsInPuzzle;
+    String mLetterSelectedToUseInPuzzle;
+    int mSpaceInPuzzleToFill;
+
+    public void replaceBlankSpaceWithLetter(int spaceInPuzzleToFill) {
+        this.mSpaceInPuzzleToFill = spaceInPuzzleToFill;
+        mLetterExistsInPuzzle = true;
+    }
+
+    public void letterSelectedFromKeyboard(int letter) {
+        this.mLetterSelectedToUseInPuzzle = alphabetConversions.convertPositionToLetter(letter);
+    }
 
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -38,6 +51,21 @@ public class BoardCanvas extends View {
         for (int i=0; i<numberOfSpaces; i++) {
             mCanvas.drawLine(xPos, 0, xPos+dpConv(20), 0, mPaint);
             xPos += dpConv(30);
+            if (mLetterExistsInPuzzle) {
+                int letterStart = setSpacingOfLetterPopulatingBoard(i);
+                int letterEnd = letterStart + dpConv(20);
+                mCanvas.drawText(mLetterSelectedToUseInPuzzle, letterStart, letterEnd, mPaint);
+
+                mLetterExistsInPuzzle = false;
+            }
+        }
+    }
+
+    public int setSpacingOfLetterPopulatingBoard(int positionInPuzzle) {
+        if (positionInPuzzle!=12) {
+            return dpConv( (192) - (16*positionInPuzzle));
+        } else {
+            return dpConv(4);
         }
     }
 
