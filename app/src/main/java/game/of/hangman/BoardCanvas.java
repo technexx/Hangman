@@ -78,25 +78,18 @@ public class BoardCanvas extends View {
 
         for (int i=0; i<numberOfSpaces; i++) {
             mCanvas.drawLine(xPos, yPos, xPos+dpConv(20), yPos, mPaint);
-            xPos += dpConv(30);
-        }
 
-        Log.i("testWord", "selected list is " + lettersInPuzzleArrayList);
-        for (int k=0; k<lettersInPuzzleArrayList.size(); k++) {
-            String puzzleLetter = lettersInPuzzleArrayList.get(k);
-            int indexPlaces = lettersInPuzzleArrayList.size() - 1;
+            String puzzleLetter = lettersInPuzzleArrayList.get(i);
             if (!puzzleLetter.equals(" ")) {
-                int letterPosition = setSpacingOfLetterPopulatingBoard(indexPlaces - k);
-
-//                int letterPosition = setSpacingOfLetterPopulatingBoard(indexPlaces - k);
-                mCanvas.drawText(puzzleLetter, letterPosition, dpConv(25) , mPaintText);
+                mCanvas.drawText(puzzleLetter, xPos+dpConv(4), dpConv(55) , mPaintText);
             }
+            xPos += dpConv(30);
         }
     }
 
     public int setSpacingOfLetterPopulatingBoard(int positionInPuzzle) {
         if (positionInPuzzle!=11) {
-            return dpConv( (220) - (30*positionInPuzzle));
+            return dpConv( (220) - (18*positionInPuzzle));
         } else {
             return dpConv(4);
         }
