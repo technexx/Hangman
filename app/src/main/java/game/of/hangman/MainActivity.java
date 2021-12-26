@@ -43,27 +43,28 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             alphabetKeyAdapter.greyOutSelectedLetter(alphabetLetter);
 
             boardCanvas.addLetterSelectedToTotalLetterArrayList(alphabetLetter);
-
-            int positionOfLetter = returnPositionOfLetterInPuzzleIfItExists(alphabetLetter);
-            if (positionOfLetter != LETTER_DOES_NOT_EXIST) {
-                boardCanvas.addLetterSelectedToPuzzleArrayList(positionOfLetter);
-            } else {
-//                boardCanvas.addToGallows();
-            }
+            boardCanvas.addLetterSelectedToPuzzleArrayList(returnArrayOfChosenLetterInPuzzleIfItExists(alphabetLetter));
         }
     }
 
-    public int returnPositionOfLetterInPuzzleIfItExists(int keyboardLetterPosition) {
+    public ArrayList<Integer> returnArrayOfChosenLetterInPuzzleIfItExists(int keyboardLetterPosition) {
         String letterSelected = alphabetConversions.convertPositionToLetter(keyboardLetterPosition);
         ArrayList<String> chosenWordArray = splitPuzzleWord(wordChosen);
-        int positionOfChosenLetterInPuzzle = -1;
+
+        ArrayList<Integer> positionListOfChosenLetterInPuzzle = new ArrayList<>();
 
         for (int i=0; i<chosenWordArray.size(); i++) {
+            positionListOfChosenLetterInPuzzle.add(-1);
             if (chosenWordArray.get(i).equalsIgnoreCase(letterSelected)) {
-                positionOfChosenLetterInPuzzle = i;
+                positionListOfChosenLetterInPuzzle.set(i, i);
             }
         }
-        return positionOfChosenLetterInPuzzle;
+
+        //////////////////////
+        boardCanvas.arrayOfWord(chosenWordArray);
+        ///////////////////////
+
+        return positionListOfChosenLetterInPuzzle;
     }
 
     public ArrayList<String> splitPuzzleWord(String word) {
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             wordChosen = easyWordsArray[positionSelected];
 
             //Todo: Testing.
-            wordChosen = "duck";
+            wordChosen = "believe";
         }
         if (difficulty==MEDIUM_WORD) {
             int mediumSize = mediumWordsArray.length;

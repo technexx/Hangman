@@ -27,6 +27,10 @@ public class BoardCanvas extends View {
     ArrayList<String> totalLettersSelectedArrayList = new ArrayList<>();
     ArrayList<String> lettersInPuzzleArrayList = new ArrayList<>();
 
+    public ArrayList<String> arrayOfWord(ArrayList<String> theArray) {
+        return theArray;
+    }
+
     public void populatePuzzleArrayListWithBlanks(int numberOfBlanks) {
         for (int i=0; i<numberOfBlanks; i++) {
             lettersInPuzzleArrayList.add(" ");
@@ -41,9 +45,13 @@ public class BoardCanvas extends View {
         Log.i("testWord", "total list is " + totalLettersSelectedArrayList);
     }
 
-    public void addLetterSelectedToPuzzleArrayList(int letterPositionInPuzzle) {
+    public void addLetterSelectedToPuzzleArrayList(ArrayList<Integer> letterArrayInPuzzle) {
         if (!lettersInPuzzleArrayList.contains(letterReceived)) {
-            lettersInPuzzleArrayList.set(letterPositionInPuzzle, letterReceived);
+            for (int i=0; i<letterArrayInPuzzle.size(); i++) {
+                if (!letterArrayInPuzzle.get(i).equals(-1)) {
+                    lettersInPuzzleArrayList.set(i, letterReceived);
+                }
+            }
         }
         invalidate();
     }
@@ -73,7 +81,6 @@ public class BoardCanvas extends View {
             xPos += dpConv(30);
         }
 
-        //Todo: Need to adjust for multiple letters in word.
         Log.i("testWord", "selected list is " + lettersInPuzzleArrayList);
         for (int k=0; k<lettersInPuzzleArrayList.size(); k++) {
             String puzzleLetter = lettersInPuzzleArrayList.get(k);
