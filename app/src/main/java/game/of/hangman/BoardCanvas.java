@@ -27,10 +27,6 @@ public class BoardCanvas extends View {
     ArrayList<String> totalLettersSelectedArrayList = new ArrayList<>();
     ArrayList<String> lettersInPuzzleArrayList = new ArrayList<>();
 
-    public ArrayList<String> arrayOfWord(ArrayList<String> theArray) {
-        return theArray;
-    }
-
     public void populatePuzzleArrayListWithBlanks(int numberOfBlanks) {
         for (int i=0; i<numberOfBlanks; i++) {
             lettersInPuzzleArrayList.add(" ");
@@ -42,16 +38,20 @@ public class BoardCanvas extends View {
         if (!totalLettersSelectedArrayList.contains(letterReceived)) {
             totalLettersSelectedArrayList.add(letterReceived);
         }
-        Log.i("testWord", "total list is " + totalLettersSelectedArrayList);
     }
 
     public void addLetterSelectedToPuzzleArrayList(ArrayList<Integer> letterArrayInPuzzle) {
+        int lettersAdded = 0;
         if (!lettersInPuzzleArrayList.contains(letterReceived)) {
             for (int i=0; i<letterArrayInPuzzle.size(); i++) {
                 if (!letterArrayInPuzzle.get(i).equals(-1)) {
                     lettersInPuzzleArrayList.set(i, letterReceived);
+                    lettersAdded++;
                 }
             }
+        }
+        if (lettersAdded==0) {
+            addToGallows();
         }
         invalidate();
     }

@@ -60,10 +60,6 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             }
         }
 
-        //////////////////////
-        boardCanvas.arrayOfWord(chosenWordArray);
-        ///////////////////////
-
         return positionListOfChosenLetterInPuzzle;
     }
 
