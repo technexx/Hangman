@@ -77,21 +77,16 @@ public class BoardCanvas extends View {
         int yPos = dpConv(60);
 
         for (int i=0; i<numberOfSpaces; i++) {
-            mCanvas.drawLine(xPos, yPos, xPos+dpConv(20), yPos, mPaint);
-
             String puzzleLetter = lettersInPuzzleArrayList.get(i);
             if (!puzzleLetter.equals(" ")) {
+                if (puzzleLetter.equalsIgnoreCase("i")) {
+                    xPos += dpConv(4);
+                }
                 mCanvas.drawText(puzzleLetter, xPos+dpConv(4), dpConv(55) , mPaintText);
+            } else {
+                mCanvas.drawLine(xPos, yPos, xPos+dpConv(20), yPos, mPaint);
             }
             xPos += dpConv(30);
-        }
-    }
-
-    public int setSpacingOfLetterPopulatingBoard(int positionInPuzzle) {
-        if (positionInPuzzle!=11) {
-            return dpConv( (220) - (18*positionInPuzzle));
-        } else {
-            return dpConv(4);
         }
     }
 
