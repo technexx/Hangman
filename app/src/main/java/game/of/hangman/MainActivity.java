@@ -7,12 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapter.LetterSelected {
+public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapter.LetterSelected, BoardCanvas.GameOver {
 
     //Fira code retina
     AlphabetConversions alphabetConversions;
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     Button easyGame;
     Button mediumGame;
     Button hardGame;
-    boolean hasGameStarted;
+    TextView gameOverTextView;
+    boolean gameIsActive;
 
     String[] easyWordsArray;
     String[] mediumWordsArray;
@@ -35,9 +37,19 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     String wordChosen;
 
     @Override
+    public void onGameEnded(boolean isWon) {
+        gameIsActive = false;
+        gameOverTextView.setVisibility(View.VISIBLE);
+        if (isWon) {
+            gameOverTextView.setText("YOU WIN!");
+        } else {
+            gameOverTextView.setText("YOU LOSE!");
+        }
+    }
+
+    @Override
     public void onLetterSelected(int alphabetLetter) {
-        if (hasGameStarted) {
-            Log.i("testWord", "word is " + wordChosen);
+        if (gameIsActive) {
             alphabetKeyAdapter.greyOutSelectedLetter(alphabetLetter);
 
             boardCanvas.addLetterSelectedToTotalLetterArrayList(alphabetLetter);
@@ -78,11 +90,15 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
 
         alphabetKeyAdapter = new AlphabetKeyAdapter(getApplicationContext(), alphabetConversions.alphabetStringArray());
         alphabetKeyAdapter.selectLetter(MainActivity.this);
+        boardCanvas = findViewById(R.id.board_canvas);
+        boardCanvas.gameHasEnded(MainActivity.this);
 
         easyGame = findViewById(R.id.easy_game);
         mediumGame = findViewById(R.id.medium_game);
         hardGame = findViewById(R.id.hard_game);
-        boardCanvas = findViewById(R.id.board_canvas);
+
+        gameOverTextView = findViewById(R.id.game_over_textView);
+        gameOverTextView.setVisibility(View.GONE);
 
         GridView alphabetGridView = findViewById(R.id.alphabet_listView);
         alphabetGridView.setNumColumns(9);
@@ -148,12 +164,12 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             easyGame.setVisibility(View.GONE);
             mediumGame.setVisibility(View.GONE);
             hardGame.setVisibility(View.GONE);
-            hasGameStarted = true;
+            gameIsActive = true;
         } else {
             easyGame.setVisibility(View.VISIBLE);
             mediumGame.setVisibility(View.VISIBLE);
             hardGame.setVisibility(View.VISIBLE);
-            hasGameStarted = false;
+            gameIsActive = false;
 
             boardCanvas.numberOfLettersInPuzzle("");
             boardCanvas.drawPuzzleLetterBoard();

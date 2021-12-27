@@ -29,6 +29,16 @@ public class BoardCanvas extends View {
     ArrayList<String> totalLettersSelectedArrayList = new ArrayList<>();
     ArrayList<String> lettersInPuzzleArrayList = new ArrayList<>();
 
+    GameOver mGameOver;
+
+    public interface GameOver {
+        void onGameEnded(boolean isWon);
+    }
+
+    public void gameHasEnded(GameOver xGameOver) {
+        this.mGameOver = xGameOver;
+    }
+
     public void populatePuzzleArrayListWithBlanks(int numberOfBlanks) {
         for (int i=0; i<numberOfBlanks; i++) {
             lettersInPuzzleArrayList.add(" ");
@@ -55,7 +65,21 @@ public class BoardCanvas extends View {
         if (lettersAdded==0) {
             addToGallows();
         }
+
+        if (!lettersInPuzzleArrayList.contains(" ")) {
+            showEndGameText(true);
+        } else if (mGallowsProgress==6) {
+            showEndGameText(false);
+        }
         invalidate();
+    }
+
+    public void showEndGameText(boolean gameWon) {
+        if (gameWon) {
+            mGameOver.onGameEnded(true);
+        } else {
+            mGameOver.onGameEnded(false);
+        }
     }
 
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
@@ -70,7 +94,9 @@ public class BoardCanvas extends View {
         mPaint.setStrokeWidth(6);
 
         mPaintText = new Paint();
-        mPaintText.setTextSize(70f);
+        int testConv = dpConv(23);
+        Log.i("testsize", "size is " + testConv);
+        mPaintText.setTextSize(dpConv(23f));
         mPaintText.setColor(Color.BLACK);
     }
 
@@ -149,10 +175,10 @@ public class BoardCanvas extends View {
                 mCanvas.drawCircle(dpConv(xPosStart-10), dpConv(topY-10), dpConv(3), mPaint);
                 mCanvas.drawCircle(dpConv(xPosStart+10), dpConv(topY-10), dpConv(3), mPaint);
             } else {
-                mPaintText.setTextSize(40f);
+                mPaintText.setTextSize(dpConv(13f));
                 mCanvas.drawText("x", dpConv(xPosStart-10), dpConv(topY-10), mPaintText);
                 mCanvas.drawText("x", dpConv(xPosStart+3), dpConv(topY-10), mPaintText);
-                mPaintText.setTextSize(70f);
+                mPaintText.setTextSize(dpConv(23f));
                 mCanvas.drawLine(dpConv(xPosStart), dpConv(topY+9), dpConv(xPosStart), dpConv(topY+20), mPaint);
             }
             mPaint.setStyle(Paint.Style.FILL);
