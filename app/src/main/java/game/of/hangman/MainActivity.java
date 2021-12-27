@@ -127,19 +127,19 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         easyGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(EASY_WORD));
             boardCanvas.invalidate();
-            setViewsAndVariablesForActiveAndInactiveGames(true);
+            setViewsAndVariablesForActiveAndInactiveGames(gameIsActive);
         });
 
         mediumGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(MEDIUM_WORD));
             boardCanvas.invalidate();
-            setViewsAndVariablesForActiveAndInactiveGames(true);
+            setViewsAndVariablesForActiveAndInactiveGames(gameIsActive);
         });
 
         hardGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(HARD_WORD));
             boardCanvas.invalidate();
-            setViewsAndVariablesForActiveAndInactiveGames(true);
+            setViewsAndVariablesForActiveAndInactiveGames(gameIsActive);
         });
 
         resetGame.setOnClickListener(v-> {
@@ -156,9 +156,6 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             int easySize = easyWordsArray.length;
             positionSelected = random.nextInt((easySize));
             wordChosen = easyWordsArray[positionSelected];
-
-//            //Todo: Testing.
-//            wordChosen = "believe";
         }
         if (difficulty==MEDIUM_WORD) {
             int mediumSize = mediumWordsArray.length;
@@ -199,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             boardCanvas.invalidate();
 
             alphabetKeyAdapter.greyOutSelectedLetter(-1);
+            boardCanvas.clearWordListArrays();
         }
     }
 

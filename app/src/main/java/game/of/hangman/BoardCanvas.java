@@ -74,6 +74,11 @@ public class BoardCanvas extends View {
         invalidate();
     }
 
+    public void clearWordListArrays() {
+        totalLettersSelectedArrayList.clear();
+        lettersInPuzzleArrayList.clear();
+    }
+
     public void showEndGameText(boolean gameWon) {
         if (gameWon) {
             mGameOver.onGameEnded(true);
