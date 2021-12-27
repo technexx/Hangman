@@ -95,7 +95,6 @@ public class BoardCanvas extends View {
 
         mPaintText = new Paint();
         int testConv = dpConv(23);
-        Log.i("testsize", "size is " + testConv);
         mPaintText.setTextSize(dpConv(23f));
         mPaintText.setColor(Color.BLACK);
     }

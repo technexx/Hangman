@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     //Fira code retina
     AlphabetConversions alphabetConversions;
     AlphabetKeyAdapter alphabetKeyAdapter;
+    ArrayList<Integer> arrayListOfPreviouslySelectedLetters;
     Random random;
     BoardCanvas boardCanvas;
 
@@ -50,10 +51,15 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     @Override
     public void onLetterSelected(int alphabetLetter) {
         if (gameIsActive) {
-            alphabetKeyAdapter.greyOutSelectedLetter(alphabetLetter);
+            if (!arrayListOfPreviouslySelectedLetters.contains(alphabetLetter)) {
+                boardCanvas.addLetterSelectedToTotalLetterArrayList(alphabetLetter);
+                boardCanvas.addLetterSelectedToPuzzleArrayList(returnArrayOfChosenLetterInPuzzleIfItExists(alphabetLetter));
+            }
 
-            boardCanvas.addLetterSelectedToTotalLetterArrayList(alphabetLetter);
-            boardCanvas.addLetterSelectedToPuzzleArrayList(returnArrayOfChosenLetterInPuzzleIfItExists(alphabetLetter));
+            alphabetKeyAdapter.greyOutSelectedLetter(alphabetLetter);
+            arrayListOfPreviouslySelectedLetters.set(alphabetLetter, alphabetLetter);
+            Log.i("testGame", "letter array is " + arrayListOfPreviouslySelectedLetters);
+
         }
     }
 
@@ -115,19 +121,19 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         easyGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(EASY_WORD));
             boardCanvas.invalidate();
-            switchViewsForActiveOrInactivePuzzle(true);
+            setViewsAndVariablesForActiveAndEndedGames(true);
         });
 
         mediumGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(MEDIUM_WORD));
             boardCanvas.invalidate();
-            switchViewsForActiveOrInactivePuzzle(true);
+            setViewsAndVariablesForActiveAndEndedGames(true);
         });
 
         hardGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(HARD_WORD));
             boardCanvas.invalidate();
-            switchViewsForActiveOrInactivePuzzle(true);
+            setViewsAndVariablesForActiveAndEndedGames(true);
         });
 
     }
@@ -159,12 +165,17 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         return wordChosen;
     }
 
-    public void switchViewsForActiveOrInactivePuzzle(boolean activeGame) {
+    public void setViewsAndVariablesForActiveAndEndedGames(boolean activeGame) {
         if (activeGame) {
             easyGame.setVisibility(View.GONE);
             mediumGame.setVisibility(View.GONE);
             hardGame.setVisibility(View.GONE);
             gameIsActive = true;
+
+            arrayListOfPreviouslySelectedLetters = new ArrayList<>();
+            for (int i=0; i<26; i++) {
+                arrayListOfPreviouslySelectedLetters.add(-1);
+            }
         } else {
             easyGame.setVisibility(View.VISIBLE);
             mediumGame.setVisibility(View.VISIBLE);
