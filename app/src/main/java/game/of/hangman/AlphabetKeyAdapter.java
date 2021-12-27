@@ -18,7 +18,8 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
     String[] mAlphabetList;
 
     LetterSelected mLetterSelected;
-    int positionToGreyOut = -1;
+    int RESET_KEYBOARD_ALPHA = -1;
+    int positionToGreyOut;
 
     public interface LetterSelected {
         void onLetterSelected(int currentLetterSelected);
@@ -55,7 +56,7 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
             }
         });
 
-        if (positionToGreyOut==-1) {
+        if (positionToGreyOut == RESET_KEYBOARD_ALPHA) {
             letter.setAlpha(1);
         }
 
