@@ -157,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             positionSelected = random.nextInt((easySize));
             wordChosen = easyWordsArray[positionSelected];
 
-            //Todo: Testing.
-            wordChosen = "believe";
+//            //Todo: Testing.
+//            wordChosen = "believe";
         }
         if (difficulty==MEDIUM_WORD) {
             int mediumSize = mediumWordsArray.length;
@@ -197,6 +197,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             boardCanvas.numberOfLettersInPuzzle("");
             boardCanvas.drawPuzzleLetterBoard();
             boardCanvas.invalidate();
+
+            alphabetKeyAdapter.greyOutSelectedLetter(-1);
         }
     }
 

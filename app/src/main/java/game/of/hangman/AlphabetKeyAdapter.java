@@ -55,6 +55,10 @@ public class AlphabetKeyAdapter extends ArrayAdapter<AlphabetKeyAdapter> {
             }
         });
 
+        if (positionToGreyOut==-1) {
+            letter.setAlpha(1);
+        }
+
         return convertView;
     }
 
