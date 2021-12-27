@@ -82,6 +82,10 @@ public class BoardCanvas extends View {
         }
     }
 
+    public void resetGallows() {
+        mGallowsProgress = 0;
+    }
+
     public BoardCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setUpPaint();

@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
     Button easyGame;
     Button mediumGame;
     Button hardGame;
+    Button resetGame;
     TextView gameOverTextView;
     boolean gameIsActive;
 
@@ -39,13 +40,7 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
 
     @Override
     public void onGameEnded(boolean isWon) {
-        gameIsActive = false;
-        gameOverTextView.setVisibility(View.VISIBLE);
-        if (isWon) {
-            gameOverTextView.setText("YOU WIN!");
-        } else {
-            gameOverTextView.setText("YOU LOSE!");
-        }
+        setEndOfGameViewsAndVariables(isWon);
     }
 
     @Override
@@ -58,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
 
             alphabetKeyAdapter.greyOutSelectedLetter(alphabetLetter);
             arrayListOfPreviouslySelectedLetters.set(alphabetLetter, alphabetLetter);
-            Log.i("testGame", "letter array is " + arrayListOfPreviouslySelectedLetters);
-
         }
     }
 
@@ -87,6 +80,17 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         return wordArray;
     }
 
+    public void setEndOfGameViewsAndVariables(boolean gameIsWon) {
+        gameIsActive = false;
+        gameOverTextView.setVisibility(View.VISIBLE);
+        resetGame.setVisibility(View.VISIBLE);
+        if (gameIsWon) {
+            gameOverTextView.setText("YOU WIN!");
+        } else {
+            gameOverTextView.setText("YOU LOSE!");
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
 
         gameOverTextView = findViewById(R.id.game_over_textView);
         gameOverTextView.setVisibility(View.GONE);
+        resetGame = findViewById(R.id.reset_game);
+        resetGame.setVisibility(View.GONE);
 
         GridView alphabetGridView = findViewById(R.id.alphabet_listView);
         alphabetGridView.setNumColumns(9);
@@ -121,19 +127,23 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         easyGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(EASY_WORD));
             boardCanvas.invalidate();
-            setViewsAndVariablesForActiveAndEndedGames(true);
+            setViewsAndVariablesForActiveAndInactiveGames(true);
         });
 
         mediumGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(MEDIUM_WORD));
             boardCanvas.invalidate();
-            setViewsAndVariablesForActiveAndEndedGames(true);
+            setViewsAndVariablesForActiveAndInactiveGames(true);
         });
 
         hardGame.setOnClickListener(v-> {
             boardCanvas.numberOfLettersInPuzzle(selectWord(HARD_WORD));
             boardCanvas.invalidate();
-            setViewsAndVariablesForActiveAndEndedGames(true);
+            setViewsAndVariablesForActiveAndInactiveGames(true);
+        });
+
+        resetGame.setOnClickListener(v-> {
+            setViewsAndVariablesForActiveAndInactiveGames(gameIsActive);
         });
 
     }
@@ -162,15 +172,15 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
         }
 
         boardCanvas.populatePuzzleArrayListWithBlanks(wordChosen.length());
+        gameIsActive = true;
         return wordChosen;
     }
 
-    public void setViewsAndVariablesForActiveAndEndedGames(boolean activeGame) {
+    public void setViewsAndVariablesForActiveAndInactiveGames(boolean activeGame) {
         if (activeGame) {
             easyGame.setVisibility(View.GONE);
             mediumGame.setVisibility(View.GONE);
             hardGame.setVisibility(View.GONE);
-            gameIsActive = true;
 
             arrayListOfPreviouslySelectedLetters = new ArrayList<>();
             for (int i=0; i<26; i++) {
@@ -180,8 +190,10 @@ public class MainActivity extends AppCompatActivity implements AlphabetKeyAdapte
             easyGame.setVisibility(View.VISIBLE);
             mediumGame.setVisibility(View.VISIBLE);
             hardGame.setVisibility(View.VISIBLE);
-            gameIsActive = false;
+            gameOverTextView.setVisibility(View.GONE);
+            resetGame.setVisibility(View.GONE);
 
+            boardCanvas.resetGallows();
             boardCanvas.numberOfLettersInPuzzle("");
             boardCanvas.drawPuzzleLetterBoard();
             boardCanvas.invalidate();
